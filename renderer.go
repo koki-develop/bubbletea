@@ -51,20 +51,20 @@ type renderer interface {
 	// disableMouseAllMotion disables All Motion mouse tracking.
 	disableMouseAllMotion()
 
-	// enableMouseExtendedMotion enables mouse click, release, wheel and motion
+	// enableMouseExtendedMode enables mouse click, release, wheel and motion
 	// with extended reporting beyond 223 cells limit.
-	enableMouseExtendedMotion()
+	enableMouseExtendedMode()
 
-	// disableMouseExtendedMotion disables Extended Motion mouse tracking.
-	disableMouseExtendedMotion()
+	// disableMouseExtendedMode disables Extended Motion mouse tracking.
+	disableMouseExtendedMode()
 
-	// enableMousePixelsMotion enables mouse click, release, wheel, motion with
+	// enableMousePixelsMode enables mouse click, release, wheel, motion with
 	// extended reporting beyond 223 cells limit. This will report pixel
 	// coordinates instead of character cells.
-	enableMousePixelsMotion()
+	enableMousePixelsMode()
 
-	// disableMousePixelsMotion disables Pixel Motion mouse tracking.
-	disableMousePixelsMotion()
+	// disableMousePixelsMode disables Pixel Motion mouse tracking.
+	disableMousePixelsMode()
 }
 
 // repaintMsg forces a full repaint.

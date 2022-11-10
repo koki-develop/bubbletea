@@ -531,10 +531,9 @@ func TestParseSGRMouseEvent(t *testing.T) {
 			buf:  encode(0, 32, 16, true),
 			expected: []MouseEvent{
 				{
-					X:       32,
-					Y:       16,
-					Type:    MouseLeft,
-					Release: true,
+					X:    32,
+					Y:    16,
+					Type: MouseLeft,
 				},
 			},
 		},
@@ -554,10 +553,9 @@ func TestParseSGRMouseEvent(t *testing.T) {
 			buf:  encode(1, 32, 16, true),
 			expected: []MouseEvent{
 				{
-					X:       32,
-					Y:       16,
-					Type:    MouseMiddle,
-					Release: true,
+					X:    32,
+					Y:    16,
+					Type: MouseMiddle,
 				},
 			},
 		},
@@ -577,10 +575,9 @@ func TestParseSGRMouseEvent(t *testing.T) {
 			buf:  encode(2, 32, 16, true),
 			expected: []MouseEvent{
 				{
-					X:       32,
-					Y:       16,
-					Type:    MouseRight,
-					Release: true,
+					X:    32,
+					Y:    16,
+					Type: MouseRight,
 				},
 			},
 		},
@@ -712,10 +709,9 @@ func TestParseSGRMouseEvent(t *testing.T) {
 			buf:  encode(0, 32, 16, false) + encode(35, 40, 30, false) + encode(0, 64, 32, true),
 			expected: []MouseEvent{
 				{
-					X:       32,
-					Y:       16,
-					Type:    MouseLeft,
-					Release: false,
+					X:    32,
+					Y:    16,
+					Type: MouseLeft,
 				},
 				{
 					X:    40,
@@ -723,10 +719,9 @@ func TestParseSGRMouseEvent(t *testing.T) {
 					Type: MouseMotion,
 				},
 				{
-					X:       64,
-					Y:       32,
-					Type:    MouseLeft,
-					Release: true,
+					X:    64,
+					Y:    32,
+					Type: MouseLeft,
 				},
 			},
 		},

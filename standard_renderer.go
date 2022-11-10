@@ -381,28 +381,28 @@ func (r *standardRenderer) disableMouseAllMotion() {
 	r.out.DisableMouseAllMotion()
 }
 
-func (r *standardRenderer) enableMouseExtendedMotion() {
+func (r *standardRenderer) enableMouseExtendedMode() {
 	r.mtx.Lock()
 	defer r.mtx.Unlock()
 
 	r.out.EnableMouseExtendedMode()
 }
 
-func (r *standardRenderer) disableMouseExtendedMotion() {
+func (r *standardRenderer) disableMouseExtendedMode() {
 	r.mtx.Lock()
 	defer r.mtx.Unlock()
 
 	r.out.DisableMouseExtendedMode()
 }
 
-func (r *standardRenderer) enableMousePixelsMotion() {
+func (r *standardRenderer) enableMousePixelsMode() {
 	r.mtx.Lock()
 	defer r.mtx.Unlock()
 
 	r.out.EnableMousePixelsMode()
 }
 
-func (r *standardRenderer) disableMousePixelsMotion() {
+func (r *standardRenderer) disableMousePixelsMode() {
 	r.mtx.Lock()
 	defer r.mtx.Unlock()
 

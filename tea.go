@@ -256,6 +256,13 @@ func (p *Program) handleCommands(cmds chan Cmd) chan struct{} {
 	return ch
 }
 
+func (p *Program) disableMouse() {
+	p.renderer.disableMouseCellMotion()
+	p.renderer.disableMouseAllMotion()
+	p.renderer.disableMouseExtendedMode()
+	p.renderer.disableMousePixelsMode()
+}
+
 // eventLoop is the central message loop. It receives and handles the default
 // Bubble Tea messages, update the model and triggers redraws.
 func (p *Program) eventLoop(model Model, cmds chan Cmd) (Model, error) {
@@ -289,10 +296,7 @@ func (p *Program) eventLoop(model Model, cmds chan Cmd) (Model, error) {
 				p.renderer.enableMouseAllMotion()
 
 			case disableMouseMsg:
-				p.renderer.disableMouseCellMotion()
-				p.renderer.disableMouseAllMotion()
-				p.renderer.disableMouseExtendedMotion()
-				p.renderer.disableMousePixelsMotion()
+				p.disableMouse()
 
 			case showCursorMsg:
 				p.renderer.showCursor()
@@ -413,9 +417,9 @@ func (p *Program) Run() (Model, error) {
 		p.renderer.enableMouseAllMotion()
 	}
 	if p.startupOptions&withMouseExtendedMode != 0 {
-		p.renderer.enableMouseExtendedMotion()
+		p.renderer.enableMouseExtendedMode()
 	} else if p.startupOptions&withMousePixelsMode != 0 {
-		p.renderer.enableMousePixelsMotion()
+		p.renderer.enableMousePixelsMode()
 	}
 
 	// Initialize the program.
