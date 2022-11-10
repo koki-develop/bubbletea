@@ -49,6 +49,23 @@ func TestMouseEvent_String(t *testing.T) {
 			expected: "motion",
 		},
 		{
+			name: "shift+left",
+			event: MouseEvent{
+				Type:  MouseLeft,
+				Shift: true,
+			},
+			expected: "shift+left",
+		},
+		{
+			name: "ctrl+shift+left",
+			event: MouseEvent{
+				Type:  MouseLeft,
+				Shift: true,
+				Ctrl:  true,
+			},
+			expected: "ctrl+shift+left",
+		},
+		{
 			name: "alt+left",
 			event: MouseEvent{
 				Type: MouseLeft,
@@ -72,6 +89,16 @@ func TestMouseEvent_String(t *testing.T) {
 				Ctrl: true,
 			},
 			expected: "ctrl+alt+left",
+		},
+		{
+			name: "ctrl+alt+shift+left",
+			event: MouseEvent{
+				Type:  MouseLeft,
+				Alt:   true,
+				Ctrl:  true,
+				Shift: true,
+			},
+			expected: "ctrl+alt+shift+left",
 		},
 		{
 			name: "ignore coordinates",

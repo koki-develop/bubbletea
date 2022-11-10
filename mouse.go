@@ -13,11 +13,12 @@ type MouseMsg MouseEvent
 // MouseEvent represents a mouse event, which could be a click, a scroll wheel
 // movement, a cursor movement, or a combination.
 type MouseEvent struct {
-	X    int
-	Y    int
-	Type MouseEventType
-	Alt  bool
-	Ctrl bool
+	X     int
+	Y     int
+	Type  MouseEventType
+	Shift bool
+	Alt   bool
+	Ctrl  bool
 }
 
 // String returns a string representation of a mouse event.
@@ -27,6 +28,9 @@ func (m MouseEvent) String() (s string) {
 	}
 	if m.Alt {
 		s += "alt+"
+	}
+	if m.Shift {
+		s += "shift+"
 	}
 	s += mouseEventTypes[m.Type]
 	return s
@@ -131,12 +135,9 @@ func parseX10MouseEvents(buf []byte) ([]MouseEvent, error) {
 			}
 		}
 
-		if e&bitAlt != 0 {
-			m.Alt = true
-		}
-		if e&bitCtrl != 0 {
-			m.Ctrl = true
-		}
+		m.Shift = e&bitShift != 0
+		m.Alt = e&bitAlt != 0
+		m.Ctrl = e&bitCtrl != 0
 
 		// (1,1) is the upper left. We subtract 1 to normalize it to (0,0).
 		m.X = int(v[1]) - byteOffset - 1
