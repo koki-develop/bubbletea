@@ -127,6 +127,42 @@ func WithMouseAllMotion() ProgramOption {
 	}
 }
 
+// WithMouseExtendedMode starts the program with the mouse enabled in "extended"
+// or "SGR" mode. This mode is to be used with either WithMouseCellMotion or
+// WithMouseAllMotion.
+//
+// EnableMouseExtendedMode is a special command that enables mouse click,
+// release, wheel, and motion events beyond the limited 223x223 coordinates
+// range.
+//
+// This is also known as "SGR" mode.
+//
+// The mouse will be automatically disabled when the program exits.
+func WithMouseExtendedMode() ProgramOption {
+	return func(p *Program) {
+		p.startupOptions |= withMouseExtendedMode // set
+		p.startupOptions &^= withMousePixelsMode  // clear
+	}
+}
+
+// WithMousePixelsMode starts the program with the mouse enabled in "pixels" or
+// "SGR-Pixels" mode. This mode is to be used with either WithMouseCellMotion or
+// WithMouseAllMotion.
+//
+// EnableMousePixelsMode is a special command that enables mouse click, release,
+// wheel, and motion events. This mode reports pixel coordinates instead of cell
+// coordinates.
+//
+// This is also known as "SGR-Pixels" mode.
+//
+// The mouse will be automatically disabled when the program exits.
+func WithMousePixelsMode() ProgramOption {
+	return func(p *Program) {
+		p.startupOptions |= withMousePixelsMode    // set
+		p.startupOptions &^= withMouseExtendedMode // clear
+	}
+}
+
 // WithoutRenderer disables the renderer. When this is set output and log
 // statements will be plainly sent to stdout (or another output if one is set)
 // without any rendering and redrawing logic. In other words, printing and

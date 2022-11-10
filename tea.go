@@ -63,7 +63,7 @@ type handlers []chan struct{}
 // generally set with ProgramOptions.
 //
 // The options here are treated as bits.
-type startupOptions byte
+type startupOptions uint16
 
 func (s startupOptions) has(option startupOptions) bool {
 	return s&option != 0
@@ -73,6 +73,8 @@ const (
 	withAltScreen startupOptions = 1 << iota
 	withMouseCellMotion
 	withMouseAllMotion
+	withMouseExtendedMode
+	withMousePixelsMode
 	withInputTTY
 	withCustomInput
 	withANSICompressor
@@ -289,6 +291,8 @@ func (p *Program) eventLoop(model Model, cmds chan Cmd) (Model, error) {
 			case disableMouseMsg:
 				p.renderer.disableMouseCellMotion()
 				p.renderer.disableMouseAllMotion()
+				p.renderer.disableMouseExtendedMotion()
+				p.renderer.disableMousePixelsMotion()
 
 			case showCursorMsg:
 				p.renderer.showCursor()
@@ -407,6 +411,11 @@ func (p *Program) Run() (Model, error) {
 		p.renderer.enableMouseCellMotion()
 	} else if p.startupOptions&withMouseAllMotion != 0 {
 		p.renderer.enableMouseAllMotion()
+	}
+	if p.startupOptions&withMouseExtendedMode != 0 {
+		p.renderer.enableMouseExtendedMotion()
+	} else if p.startupOptions&withMousePixelsMode != 0 {
+		p.renderer.enableMousePixelsMotion()
 	}
 
 	// Initialize the program.

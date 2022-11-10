@@ -40,16 +40,31 @@ type renderer interface {
 	// events if a mouse button is pressed (i.e., drag events).
 	enableMouseCellMotion()
 
-	// DisableMouseCellMotion disables Mouse Cell Motion tracking.
+	// disableMouseCellMotion disables Mouse Cell Motion tracking.
 	disableMouseCellMotion()
 
-	// EnableMouseAllMotion enables mouse click, release, wheel and motion
+	// enableMouseAllMotion enables mouse click, release, wheel and motion
 	// events, regardless of whether a mouse button is pressed. Many modern
 	// terminals support this, but not all.
 	enableMouseAllMotion()
 
-	// DisableMouseAllMotion disables All Motion mouse tracking.
+	// disableMouseAllMotion disables All Motion mouse tracking.
 	disableMouseAllMotion()
+
+	// enableMouseExtendedMotion enables mouse click, release, wheel and motion
+	// with extended reporting beyond 223 cells limit.
+	enableMouseExtendedMotion()
+
+	// disableMouseExtendedMotion disables Extended Motion mouse tracking.
+	disableMouseExtendedMotion()
+
+	// enableMousePixelsMotion enables mouse click, release, wheel, motion with
+	// extended reporting beyond 223 cells limit. This will report pixel
+	// coordinates instead of character cells.
+	enableMousePixelsMotion()
+
+	// disableMousePixelsMotion disables Pixel Motion mouse tracking.
+	disableMousePixelsMotion()
 }
 
 // repaintMsg forces a full repaint.

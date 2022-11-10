@@ -1,6 +1,9 @@
 package tea
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestMouseEvent_String(t *testing.T) {
 	tt := []struct {
@@ -469,6 +472,284 @@ func TestParseX10MouseEvent_error(t *testing.T) {
 
 			if err == nil {
 				t.Fatalf("expected error but got nil")
+			}
+		})
+	}
+}
+
+func TestParseSGRMouseEvent(t *testing.T) {
+	encode := func(b, x, y int, r bool) string {
+		re := 'M'
+		if r {
+			re = 'm'
+		}
+		return fmt.Sprintf("\x1b[<%d;%d;%d%c", b, x+1, y+1, re)
+	}
+
+	tt := []struct {
+		name     string
+		buf      string
+		expected []MouseEvent
+	}{
+		// Position.
+		{
+			name: "zero position",
+			buf:  encode(0, 0, 0, false),
+			expected: []MouseEvent{
+				{
+					X:    0,
+					Y:    0,
+					Type: MouseLeft,
+				},
+			},
+		},
+		{
+			name: "222 position",
+			buf:  encode(0, 222, 222, false),
+			expected: []MouseEvent{
+				{
+					X:    222,
+					Y:    222,
+					Type: MouseLeft,
+				},
+			},
+		},
+		// Simple.
+		{
+			name: "left",
+			buf:  encode(0, 32, 16, false),
+			expected: []MouseEvent{
+				{
+					X:    32,
+					Y:    16,
+					Type: MouseLeft,
+				},
+			},
+		},
+		{
+			name: "left release",
+			buf:  encode(0, 32, 16, true),
+			expected: []MouseEvent{
+				{
+					X:       32,
+					Y:       16,
+					Type:    MouseLeft,
+					Release: true,
+				},
+			},
+		},
+		{
+			name: "middle",
+			buf:  encode(1, 32, 16, false),
+			expected: []MouseEvent{
+				{
+					X:    32,
+					Y:    16,
+					Type: MouseMiddle,
+				},
+			},
+		},
+		{
+			name: "middle release",
+			buf:  encode(1, 32, 16, true),
+			expected: []MouseEvent{
+				{
+					X:       32,
+					Y:       16,
+					Type:    MouseMiddle,
+					Release: true,
+				},
+			},
+		},
+		{
+			name: "right",
+			buf:  encode(2, 32, 16, false),
+			expected: []MouseEvent{
+				{
+					X:    32,
+					Y:    16,
+					Type: MouseRight,
+				},
+			},
+		},
+		{
+			name: "right release",
+			buf:  encode(2, 32, 16, true),
+			expected: []MouseEvent{
+				{
+					X:       32,
+					Y:       16,
+					Type:    MouseRight,
+					Release: true,
+				},
+			},
+		},
+		{
+			name: "motion",
+			buf:  encode(35, 32, 16, false),
+			expected: []MouseEvent{
+				{
+					X:    32,
+					Y:    16,
+					Type: MouseMotion,
+				},
+			},
+		},
+		{
+			name: "wheel up",
+			buf:  encode(64, 32, 16, false),
+			expected: []MouseEvent{
+				{
+					X:    32,
+					Y:    16,
+					Type: MouseWheelUp,
+				},
+			},
+		},
+		{
+			name: "wheel down",
+			buf:  encode(65, 32, 16, false),
+			expected: []MouseEvent{
+				{
+					X:    32,
+					Y:    16,
+					Type: MouseWheelDown,
+				},
+			},
+		},
+		// Combinations.
+		{
+			name: "alt+right",
+			buf:  encode(10, 32, 16, false),
+			expected: []MouseEvent{
+				{
+					X:    32,
+					Y:    16,
+					Type: MouseRight,
+					Alt:  true,
+				},
+			},
+		},
+		{
+			name: "ctrl+right",
+			buf:  encode(18, 32, 16, false),
+			expected: []MouseEvent{
+				{
+					X:    32,
+					Y:    16,
+					Type: MouseRight,
+					Ctrl: true,
+				},
+			},
+		},
+		{
+			name: "ctrl+alt+right",
+			buf:  encode(26, 32, 16, false),
+			expected: []MouseEvent{
+				{
+					X:    32,
+					Y:    16,
+					Type: MouseRight,
+					Alt:  true,
+					Ctrl: true,
+				},
+			},
+		},
+		{
+			name: "alt+wheel down",
+			buf:  encode(73, 32, 16, false),
+			expected: []MouseEvent{
+				{
+					X:    32,
+					Y:    16,
+					Type: MouseWheelDown,
+					Alt:  true,
+				},
+			},
+		},
+		{
+			name: "ctrl+wheel down",
+			buf:  encode(81, 32, 16, false),
+			expected: []MouseEvent{
+				{
+					X:    32,
+					Y:    16,
+					Type: MouseWheelDown,
+					Ctrl: true,
+				},
+			},
+		},
+		{
+			name: "ctrl+alt+wheel down",
+			buf:  encode(89, 32, 16, false),
+			expected: []MouseEvent{
+				{
+					X:    32,
+					Y:    16,
+					Type: MouseWheelDown,
+					Alt:  true,
+					Ctrl: true,
+				},
+			},
+		},
+		{
+			name: "ctrl+alt+shift+wheel down",
+			buf:  encode(93, 32, 16, false),
+			expected: []MouseEvent{
+				{
+					X:     32,
+					Y:     16,
+					Type:  MouseWheelDown,
+					Shift: true,
+					Alt:   true,
+					Ctrl:  true,
+				},
+			},
+		},
+		// Batched events.
+		{
+			name: "batched events",
+			buf:  encode(0, 32, 16, false) + encode(35, 40, 30, false) + encode(0, 64, 32, true),
+			expected: []MouseEvent{
+				{
+					X:       32,
+					Y:       16,
+					Type:    MouseLeft,
+					Release: false,
+				},
+				{
+					X:    40,
+					Y:    30,
+					Type: MouseMotion,
+				},
+				{
+					X:       64,
+					Y:       32,
+					Type:    MouseLeft,
+					Release: true,
+				},
+			},
+		},
+	}
+
+	for i := range tt {
+		tc := tt[i]
+
+		t.Run(tc.name, func(t *testing.T) {
+			actual, err := parseSGRMouseEvents([]byte(tc.buf))
+			if err != nil {
+				t.Fatalf("unexpected error for test: %v",
+					err,
+				)
+			}
+
+			for i := range tc.expected {
+				if tc.expected[i] != actual[i] {
+					t.Fatalf("expected %#v but got %#v",
+						tc.expected[i],
+						actual[i],
+					)
+				}
 			}
 		})
 	}

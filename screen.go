@@ -85,6 +85,41 @@ func EnableMouseAllMotion() Msg {
 // enableMouseAllMotionMsg, use the EnableMouseAllMotion command.
 type enableMouseAllMotionMsg struct{}
 
+// EnableMouseExtendedMotion is a special command that enables mouse click,
+// wheel, motion, press and release events. This mode supports extended mouse
+// coordinates beyond the 223x223 range limited by EnableMouseAllMotion.
+//
+// This is also known as "SGR" mode.
+//
+// If the terminal does not support this mode, EnableMouseAllMotion will be used.
+//
+// Because commands run asynchronously, this command should not be used in your
+// model's Init function. Use the WithMouseExtendedMotion ProgramOption instead.
+func EnableMouseExtendedMotion() Msg {
+	return enableMouseExtendedMotionMsg{}
+}
+
+// enableMouseExtendedMotionMsg is a special command that signals to start
+// listening for "sgr" type mouse events (ESC[?1006l). To send an
+// enableMouseExtendedMotionMsg, use the EnableMouseExtendedMotion command.
+type enableMouseExtendedMotionMsg struct{}
+
+// EnableMousePixelsMotion is a special command that enables mouse click, wheel,
+// motion, press and release events. This mode reports pixel coordinates instead
+// of cell coordinates.
+//
+// This is also known as "SGR-Pixels" mode.
+//
+// If the terminal does not support this mode, EnableMouseAllMotion will be used.
+//
+// Because commands run asynchronously, this command should not be used in your
+// model's Init function. Use the WithMousePixelsMotion ProgramOption instead.
+func EnableMousePixelsMotion() Msg {
+	return enableMousePixelsMotionMsg{}
+}
+
+type enableMousePixelsMotionMsg struct{}
+
 // DisableMouse is a special command that stops listening for mouse events.
 func DisableMouse() Msg {
 	return disableMouseMsg{}
