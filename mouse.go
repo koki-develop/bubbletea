@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-const x10ByteOffset = 32
+const mouseX10ByteOffset = 32
 
 // MouseMsg contains information about a mouse event and are sent to a programs
 // update function when mouse activity occurs. Note that the mouse must first
@@ -281,8 +281,8 @@ func parseX10MouseEvents(buf []byte) ([]MouseEvent, error) {
 		m := parseMouseButton(int(v[0]), false)
 
 		// (1,1) is the upper left. We subtract 1 to normalize it to (0,0).
-		m.X = int(v[1]) - x10ByteOffset - 1
-		m.Y = int(v[2]) - x10ByteOffset - 1
+		m.X = int(v[1]) - mouseX10ByteOffset - 1
+		m.Y = int(v[2]) - mouseX10ByteOffset - 1
 
 		r = append(r, m)
 	}
@@ -296,7 +296,7 @@ func parseMouseButton(b int, isSGR bool) MouseEvent {
 	m.isSGR = isSGR
 	e := b
 	if !isSGR {
-		e -= x10ByteOffset
+		e -= mouseX10ByteOffset
 	}
 
 	const (
