@@ -73,7 +73,6 @@ const (
 	withAltScreen startupOptions = 1 << iota
 	withMouseCellMotion
 	withMouseAllMotion
-	withMouseExtendedMode
 	withMousePixelsMode
 	withInputTTY
 	withCustomInput
@@ -259,7 +258,6 @@ func (p *Program) handleCommands(cmds chan Cmd) chan struct{} {
 func (p *Program) disableMouse() {
 	p.renderer.disableMouseCellMotion()
 	p.renderer.disableMouseAllMotion()
-	p.renderer.disableMouseExtendedMode()
 	p.renderer.disableMousePixelsMode()
 }
 
@@ -416,9 +414,7 @@ func (p *Program) Run() (Model, error) {
 	} else if p.startupOptions&withMouseAllMotion != 0 {
 		p.renderer.enableMouseAllMotion()
 	}
-	if p.startupOptions&withMouseExtendedMode != 0 {
-		p.renderer.enableMouseExtendedMode()
-	} else if p.startupOptions&withMousePixelsMode != 0 {
+	if p.startupOptions&withMousePixelsMode != 0 {
 		p.renderer.enableMousePixelsMode()
 	}
 

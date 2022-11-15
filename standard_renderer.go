@@ -358,6 +358,7 @@ func (r *standardRenderer) enableMouseCellMotion() {
 	defer r.mtx.Unlock()
 
 	r.out.EnableMouseCellMotion()
+	r.out.EnableMouseExtendedMode()
 }
 
 func (r *standardRenderer) disableMouseCellMotion() {
@@ -365,6 +366,7 @@ func (r *standardRenderer) disableMouseCellMotion() {
 	defer r.mtx.Unlock()
 
 	r.out.DisableMouseCellMotion()
+	r.out.DisableMouseExtendedMode()
 }
 
 func (r *standardRenderer) enableMouseAllMotion() {
@@ -372,6 +374,7 @@ func (r *standardRenderer) enableMouseAllMotion() {
 	defer r.mtx.Unlock()
 
 	r.out.EnableMouseAllMotion()
+	r.out.EnableMouseExtendedMode()
 }
 
 func (r *standardRenderer) disableMouseAllMotion() {
@@ -379,19 +382,6 @@ func (r *standardRenderer) disableMouseAllMotion() {
 	defer r.mtx.Unlock()
 
 	r.out.DisableMouseAllMotion()
-}
-
-func (r *standardRenderer) enableMouseExtendedMode() {
-	r.mtx.Lock()
-	defer r.mtx.Unlock()
-
-	r.out.EnableMouseExtendedMode()
-}
-
-func (r *standardRenderer) disableMouseExtendedMode() {
-	r.mtx.Lock()
-	defer r.mtx.Unlock()
-
 	r.out.DisableMouseExtendedMode()
 }
 

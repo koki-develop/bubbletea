@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	p := tea.NewProgram(model{}, tea.WithMouseAllMotion(), tea.WithMouseExtendedMode())
+	p := tea.NewProgram(model{}, tea.WithMouseAllMotion())
 	if _, err := p.Run(); err != nil {
 		log.Fatal(err)
 	}

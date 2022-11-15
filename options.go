@@ -93,6 +93,9 @@ func WithAltScreen() ProgramOption {
 // movement events are also captured if a mouse button is pressed (i.e., drag
 // events). Cell motion mode is better supported than all motion mode.
 //
+// This will try to enable the mouse in extended mode (SGR), but if that is not
+// supported by the terminal it will fall back to normal mode (X10).
+//
 // To enable mouse cell motion once the program has already started running use
 // the EnableMouseCellMotion command. To disable the mouse when the program is
 // running use the DisableMouse command.
@@ -112,6 +115,9 @@ func WithMouseCellMotion() ProgramOption {
 // wheel, and motion events, which are delivered regardless of whether a mouse
 // button is pressed, effectively enabling support for hover interactions.
 //
+// This will try to enable the mouse in extended mode (SGR), but if that is not
+// supported by the terminal it will fall back to normal mode (X10).
+//
 // Many modern terminals support this, but not all. If in doubt, use
 // EnableMouseCellMotion instead.
 //
@@ -124,24 +130,6 @@ func WithMouseAllMotion() ProgramOption {
 	return func(p *Program) {
 		p.startupOptions |= withMouseAllMotion   // set
 		p.startupOptions &^= withMouseCellMotion // clear
-	}
-}
-
-// WithMouseExtendedMode starts the program with the mouse enabled in "extended"
-// or "SGR" mode. This mode is to be used with either WithMouseCellMotion or
-// WithMouseAllMotion.
-//
-// EnableMouseExtendedMode is a special command that enables mouse click,
-// release, wheel, and motion events beyond the limited 223x223 coordinates
-// range.
-//
-// This is also known as "SGR" mode.
-//
-// The mouse will be automatically disabled when the program exits.
-func WithMouseExtendedMode() ProgramOption {
-	return func(p *Program) {
-		p.startupOptions |= withMouseExtendedMode // set
-		p.startupOptions &^= withMousePixelsMode  // clear
 	}
 }
 
@@ -158,8 +146,7 @@ func WithMouseExtendedMode() ProgramOption {
 // The mouse will be automatically disabled when the program exits.
 func WithMousePixelsMode() ProgramOption {
 	return func(p *Program) {
-		p.startupOptions |= withMousePixelsMode    // set
-		p.startupOptions &^= withMouseExtendedMode // clear
+		p.startupOptions |= withMousePixelsMode // set
 	}
 }
 
