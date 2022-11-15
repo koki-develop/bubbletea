@@ -234,6 +234,7 @@ func parseSGRMouseEvents(buf string) ([]MouseEvent, error) {
 		// Motion can be reported as a release event in some terminals (Windows Terminal)
 		if m.Action != MouseActionMotion && !m.IsWheel() && release {
 			m.Action = MouseActionRelease
+			m.Type = MouseRelease
 		}
 
 		x, _ := strconv.Atoi(px)
