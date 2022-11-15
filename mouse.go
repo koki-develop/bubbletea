@@ -110,7 +110,7 @@ const (
 	MouseButtonWheelDown
 	MouseButtonWheelLeft
 	MouseButtonWheelRight
-	MouseButtonBackward
+	MouseButtonBack
 	MouseButtonForward
 	MouseButton10
 	MouseButton11
@@ -127,7 +127,7 @@ var mouseButtons = map[MouseButton]string{
 	MouseButtonWheelDown:  "wheel down",
 	MouseButtonWheelLeft:  "wheel left",
 	MouseButtonWheelRight: "wheel right",
-	MouseButtonBackward:   "backward",
+	MouseButtonBack:       "back",
 	MouseButtonForward:    "forward",
 	MouseButton10:         "button 10",
 	MouseButton11:         "button 11",
@@ -152,10 +152,8 @@ const (
 	MouseWheelDown
 	MouseWheelLeft
 	MouseWheelRight
-	MouseBackward
+	MouseBack
 	MouseForward
-	MouseBtn10
-	MouseBtn11
 	MouseMotion
 )
 
@@ -169,10 +167,8 @@ var mouseEventTypes = map[MouseEventType]string{
 	MouseWheelDown:  "wheel down",
 	MouseWheelLeft:  "wheel left",
 	MouseWheelRight: "wheel right",
-	MouseBackward:   "backward",
+	MouseBack:       "backward",
 	MouseForward:    "forward",
-	MouseBtn10:      "button 10",
-	MouseBtn11:      "button 11",
 	MouseMotion:     "motion",
 }
 
@@ -311,7 +307,7 @@ func parseMouseButton(b int, isSGR bool) MouseEvent {
 	)
 
 	if e&bitAdd != 0 {
-		m.Button = MouseButtonBackward + MouseButton(e&bitsMask)
+		m.Button = MouseButtonBack + MouseButton(e&bitsMask)
 	} else if e&bitWheel != 0 {
 		m.Button = MouseButtonWheelUp + MouseButton(e&bitsMask)
 	} else {
@@ -346,14 +342,10 @@ func parseMouseButton(b int, isSGR bool) MouseEvent {
 		m.Type = MouseWheelLeft
 	case m.Button == MouseButtonWheelRight && m.Action == MouseActionPress:
 		m.Type = MouseWheelRight
-	case m.Button == MouseButtonBackward && m.Action == MouseActionPress:
-		m.Type = MouseBackward
+	case m.Button == MouseButtonBack && m.Action == MouseActionPress:
+		m.Type = MouseBack
 	case m.Button == MouseButtonForward && m.Action == MouseActionPress:
 		m.Type = MouseForward
-	case m.Button == MouseButton10 && m.Action == MouseActionPress:
-		m.Type = MouseBtn10
-	case m.Button == MouseButton11 && m.Action == MouseActionPress:
-		m.Type = MouseBtn11
 	case m.Action == MouseActionMotion:
 		m.Type = MouseMotion
 		switch m.Button {
@@ -363,14 +355,10 @@ func parseMouseButton(b int, isSGR bool) MouseEvent {
 			m.Type = MouseMiddle
 		case MouseButtonRight:
 			m.Type = MouseRight
-		case MouseButtonBackward:
-			m.Type = MouseBackward
+		case MouseButtonBack:
+			m.Type = MouseBack
 		case MouseButtonForward:
 			m.Type = MouseForward
-		case MouseButton10:
-			m.Type = MouseBtn10
-		case MouseButton11:
-			m.Type = MouseBtn11
 		}
 	default:
 		m.Type = MouseUnknown

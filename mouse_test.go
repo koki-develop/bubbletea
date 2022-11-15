@@ -411,9 +411,9 @@ func TestParseX10MouseEvent(t *testing.T) {
 				{
 					X:      32,
 					Y:      16,
-					Type:   MouseBackward,
+					Type:   MouseBack,
 					Action: MouseActionPress,
-					Button: MouseButtonBackward,
+					Button: MouseButtonBack,
 				},
 			},
 		},
@@ -437,7 +437,7 @@ func TestParseX10MouseEvent(t *testing.T) {
 				{
 					X:      32,
 					Y:      16,
-					Type:   MouseBtn10,
+					Type:   MouseUnknown,
 					Action: MouseActionPress,
 					Button: MouseButton10,
 				},
@@ -450,7 +450,7 @@ func TestParseX10MouseEvent(t *testing.T) {
 				{
 					X:      32,
 					Y:      16,
-					Type:   MouseBtn11,
+					Type:   MouseUnknown,
 					Action: MouseActionPress,
 					Button: MouseButton11,
 				},
@@ -900,9 +900,9 @@ func TestParseSGRMouseEvent(t *testing.T) {
 				{
 					X:      32,
 					Y:      16,
-					Type:   MouseBackward,
+					Type:   MouseBack,
 					Action: MouseActionPress,
-					Button: MouseButtonBackward,
+					Button: MouseButtonBack,
 					isSGR:  true,
 				},
 			},
@@ -914,9 +914,9 @@ func TestParseSGRMouseEvent(t *testing.T) {
 				{
 					X:      32,
 					Y:      16,
-					Type:   MouseBackward,
+					Type:   MouseBack,
 					Action: MouseActionMotion,
-					Button: MouseButtonBackward,
+					Button: MouseButtonBack,
 					isSGR:  true,
 				},
 			},
